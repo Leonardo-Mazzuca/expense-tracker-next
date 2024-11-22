@@ -1,12 +1,13 @@
-'use client'
-import { useCheckUser } from '@/hooks/check-user';
+
+
+import { checkUser } from '@/lib/check-user';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 
-const Header = () => {
+const Header = async () => {
 
 
-useCheckUser();
+  const user =await checkUser();
 
   return (
     <nav className='navbar'>

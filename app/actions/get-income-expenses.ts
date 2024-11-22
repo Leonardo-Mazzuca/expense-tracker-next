@@ -4,12 +4,19 @@
 
 'use server'
 import { db } from "@/lib/db"
+import { auth } from "@clerk/nextjs/server";
 
-async function getIncomeExpenses(userId: string):Promise<{
+async function getIncomeExpenses():Promise<{
     income?:number,
     expense?:number
     error?:string
 }>{
+
+    const {userId} = await auth();
+
+    if(!userId) {
+        return {error: 'User not found'}
+    }
 
     try {
 

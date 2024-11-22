@@ -1,42 +1,13 @@
 
-'use client'
 
 import getIncomeExpenses from '@/app/actions/get-income-expenses'
-import { useUser } from '@clerk/nextjs'
-import React, { useEffect, useState } from 'react'
+import { addCommas } from '@/lib/utils'
+import React from 'react'
 
-const IncomeExpense = () => {
+const IncomeExpense = async () => {
 
     
-    const [balance, setBalance] = useState({
-        income: 0,
-        expense: 0
-    })
-
-    const {user,isLoaded} = useUser();
-
-
-    useEffect(()=> {
-
-        const fetchBalance = async () => {
-            
-            if(user) {
-                const balance= await getIncomeExpenses(user?.id)
-                setBalance({
-                    income: balance.income || 0,
-                    expense: balance.expense || 0
-                })
-            }
-
-
-        }
-
-        fetchBalance()
-    },[user])
-
-    if(!user || !isLoaded){
-        return null;
-    }
+    const {expense,income} = await getIncomeExpenses();
 
   return (
 
@@ -46,7 +17,7 @@ const IncomeExpense = () => {
                 Income
             </h4>
             <p className='money plus'>
-                ${balance.income}
+                ${addCommas(Number(income?.toFixed(2)))}
             </p>
         </div>
         <div>
@@ -54,7 +25,7 @@ const IncomeExpense = () => {
                 Expense
             </h4>
             <p className='money minus'>
-                ${balance.expense}
+                ${addCommas(Number(expense?.toFixed(2)))}
             </p>
         </div>
     </div>

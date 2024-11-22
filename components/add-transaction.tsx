@@ -1,24 +1,18 @@
 'use client'
 
 import addTransaction from "@/app/actions/add-transaction"
-import { useUser } from "@clerk/nextjs"
 import { useRef } from "react"
 import { toast } from "react-toastify"
 
 
 const AddTransaction = () => {
 
-    const {user,isLoaded} = useUser();
-
-    if(!isLoaded || !user){
-        return null;
-    }
 
     const formRef = useRef<HTMLFormElement>(null);
 
     const clientAction = async (formData:FormData) => {
 
-        const {data,error} = await addTransaction(formData,user?.id)
+        const {data,error} = await addTransaction(formData)
         
         if(error){
 

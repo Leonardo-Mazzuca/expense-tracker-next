@@ -1,13 +1,19 @@
 'use server'
 
 import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 
 
-async function addTransaction (formData:FormData,userId: string):Promise<TransactionResult> {
+async function addTransaction (formData:FormData):Promise<TransactionResult> {
 
-    
+    const {userId} = await auth();
+
+    if(!userId) {
+        return {error: 'User not found'}
+    }
+
     const textValue = formData.get('text');
     const amountValue = formData.get('amount');
 

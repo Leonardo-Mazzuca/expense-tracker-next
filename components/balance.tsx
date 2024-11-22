@@ -1,33 +1,16 @@
-'use client'
+
 
 import getUserBalance from '@/app/actions/get-user-balance';
 import { addCommas } from '@/lib/utils';
-import { useUser } from '@clerk/nextjs'
-import React, { useEffect, useState } from 'react'
 
-const Balance = () => {
+const Balance = async () => {
 
 
-    const {user,isLoaded} = useUser();
+    const {balance,error} = await getUserBalance();
 
-    if(!isLoaded || !user){
-        return null
+    if(error){
+        return <p className="error">{error}</p>;
     }
-
-    const [balance, setBalance] = useState(0)
-
-    useEffect(()=> {
-
-        const fetchBalance = async () => {
-            const {balance} = await getUserBalance(user.id)
-
-            if(balance) setBalance(balance)
-
-        }
-
-        fetchBalance()
-
-    },[])
 
   return (
     
@@ -37,7 +20,7 @@ const Balance = () => {
             Your balance
         </h4>
         <h1>
-            ${addCommas(balance) ?? 0}
+            ${addCommas(Number(balance?.toFixed(2))) ?? 0}
         </h1>
         
     </>

@@ -1,7 +1,6 @@
 'use client'
 import { deleteTransaction } from "@/app/actions/delete-transaction";
 import { addCommas } from "@/lib/utils";
-import { useUser } from "@clerk/nextjs";
 import { toast } from "react-toastify";
 
 const TransactionItem = ({
@@ -10,7 +9,6 @@ const TransactionItem = ({
   transaction: Transaction;
 }) => {
 
-  const {user,isLoaded} = useUser();
   const handleDeleteTransaction = async (transactionId: string) => {
 
     const confirm = window.confirm('Are you sure you want to delete this transaction?')
@@ -19,9 +17,9 @@ const TransactionItem = ({
       return
     }
 
-    if(user) {
 
-      const {message,error} = await deleteTransaction(user?.id,transactionId)
+
+      const {message,error} = await deleteTransaction(transactionId)
       
       if(message){
         toast.success(message)
@@ -31,14 +29,12 @@ const TransactionItem = ({
         toast.error(error)
       }
 
-    }
+    
 
   }
 
 
-  if(!user || !isLoaded){
-    return null;
-  }
+ 
 
   return (
 
